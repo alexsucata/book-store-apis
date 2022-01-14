@@ -23,4 +23,50 @@ public class BookStoreRepository {
                 .map(BookStoreModel::getBooks)
                 .orElse(new ArrayList<>());
     }
+
+    public List<BookStoreModel> getAllBookStores() {
+        return bookStores.values().stream().toList();
+    }
+
+    public BookStoreModel getBookStoreById(String storeId) {
+        return bookStores.get(storeId);
+    }
+
+    public void addBookStore(BookStoreModel store) {
+        if (!bookStores.containsKey(store.getId())) {
+            bookStores.put(store.getId(), store);
+        } else {
+            System.out.println("The store is already in the list");
+        }
+    }
+
+    public BookModel findBookByStoreAndIsbn(String storeId, String isbn) {
+        return findAllForStore(storeId)
+                .stream()
+                .filter(b -> isbn.equals(b.getIsbn()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void addNewBookToStore(String storeId, BookModel book) {
+        if (findBookByStoreAndIsbn(storeId, book.getIsbn()) == null) {
+            BookStoreModel bookStore = getBookStoreById(storeId);
+            if (bookStore != null) {
+                bookStore.getBooks().add(book);
+            } else {
+                throw new RuntimeException("The store with the id: " + storeId + "doesn't exist");
+            }
+
+        }
+    }
 }
+
+
+//        Book stores:
+//        Get all book stores
+//        Get a book store by id
+//        Add a new book store
+//        Books:
+//        Get all books in a store
+//        Get single book in a store by book isbn
+//        Add a new book in a store
