@@ -24,14 +24,16 @@ public class BookStoreRepository {
                 .orElse(new ArrayList<>());
     }
 
+    // Get all book stores
     public List<BookStoreModel> getAllBookStores() {
         return bookStores.values().stream().toList();
     }
-
+// Get a book store by id
     public BookStoreModel getBookStoreById(String storeId) {
         return bookStores.get(storeId);
     }
 
+    // Add a new book store
     public void addBookStore(BookStoreModel store) {
         if (!bookStores.containsKey(store.getId())) {
             bookStores.put(store.getId(), store);
