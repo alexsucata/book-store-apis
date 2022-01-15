@@ -30,7 +30,12 @@ public class BookStoreRepository {
     }
 // Get a book store by id
     public BookStoreModel getBookStoreById(String storeId) {
-        return bookStores.get(storeId);
+        if (bookStores.containsKey(storeId)) {
+            return bookStores.get(storeId);
+        }else{
+            throw new RuntimeException("The store with the id: " + storeId + "doesn't exist");
+        }
+
     }
 
     // Add a new book store

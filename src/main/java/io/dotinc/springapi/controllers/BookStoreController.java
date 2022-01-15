@@ -23,12 +23,17 @@ public class BookStoreController {
 
     @GetMapping("/bookstores")
     public List<BookStoreModel> getAllBookStores() {
-        return bookStoreRepository.getAllBookStores().stream().toList();
+        return bookStoreRepository.getAllBookStores();
     }
 
     @GetMapping("/bookstores/{id}")
     public BookStoreModel getBookStoreById(@PathVariable String id) {
-        return bookStoreRepository.getBookStoreById(id);
+        try {
+            return bookStoreRepository.getBookStoreById(id);
+        } catch (Exception ex) {
+            //TODO return 404
+        }
+        return  null;
     }
 
     @PostMapping("/bookstores/add")
