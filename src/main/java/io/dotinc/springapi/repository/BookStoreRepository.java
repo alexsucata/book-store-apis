@@ -39,11 +39,12 @@ public class BookStoreRepository {
     }
 
     // Add a new book store
-    public void addBookStore(BookStoreModel store) {
+    public void addBookStore(BookStoreModel store) throws Exception{
         if (!bookStores.containsKey(store.getId())) {
             bookStores.put(store.getId(), store);
         } else {
-            System.out.println("The store is already in the list");
+            throw new Exception("The store is already in the list");
+
         }
     }
 
@@ -55,15 +56,17 @@ public class BookStoreRepository {
                 .orElse(null);
     }
 
-    public void addNewBookToStore(String storeId, BookModel book) {
-        if (findBookByStoreAndIsbn(storeId, book.getIsbn()) == null) {
-            BookStoreModel bookStore = getBookStoreById(storeId);
-            if (bookStore != null) {
-                bookStore.getBooks().add(book);
-            } else {
-                throw new RuntimeException("The store with the id: " + storeId + "doesn't exist");
-            }
+    public void addNewBookToStore(String storeId, BookModel book) throws Exception {
+        BookStoreModel bookStore = getBookStoreById(storeId);
 
+        if (bookStore != null) {
+            if (findBookByStoreAndIsbn(storeId, book.getIsbn()) == null) {
+                List<BookModel> books = bookStore.getBooks();
+                books.add(book);
+                bookStore.setBooks(books);
+            } else {
+                throw new Exception("This book exists in the store");
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.dotinc.springapi.controllers;
 
 
+import io.dotinc.springapi.model.BookDto;
 import io.dotinc.springapi.model.BookModel;
 import io.dotinc.springapi.model.BookStoreModel;
 import io.dotinc.springapi.repository.BookStoreRepository;
@@ -37,15 +38,16 @@ public class BookController {
         return bookStoreRepository.findBookByStoreAndIsbn(id, isbn);
     }
 
-//    @PostMapping("/add")
-//    public ResponseEntity<String> addNewBookInAStore(@Valid @RequestBody BookStoreModel store, @RequestBody BookModel book, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            String errors = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining("; "));
-//            return ResponseEntity.status(412).body(errors);
-//        } else {
-//            bookStoreRepository.addNewBookToStore(store.getId(), book);
-//            return ResponseEntity.ok().body("succes");
-//        }
-//
-//    }
-}
+    @PostMapping("/add")
+    public ResponseEntity<String> addNewBookInAStore(@RequestBody BookDto bookDto) {
+        try {
+            BookModel book = new BookModel(bookDto.getIsbn(), bookDto.getName(), bookDto.getAuthor(), bookDto.getPrice(), bookDto.getPages());
+            bookStoreRepository.addNewBookToStore(bookDto.getStoreId(), book);
+            return ResponseEntity.ok().body("Action successfully finalized");
+        } catch(Exception e){
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+
+
+        }
+    }

@@ -33,18 +33,17 @@ public class BookStoreController {
         } catch (Exception ex) {
             //TODO return 404
         }
-        return  null;
+        return null;
     }
 
     @PostMapping("/bookstores/add")
-    public ResponseEntity<String> addNewBookStore(@Valid @RequestBody BookStoreModel store, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining("; "));
-            return ResponseEntity.status(412).body(errors);
-        } else {
-            bookStoreRepository.addBookStore(store);
-            return ResponseEntity.ok().body("succes");
-        }
+    public ResponseEntity<String> addNewBookStore(@Valid @RequestBody BookStoreModel store) {
+            try {
+                bookStoreRepository.addBookStore(store);
+                return ResponseEntity.ok().body("Action successfully finalized");
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body(e.getMessage());
+            }
 
+        }
     }
-}
